@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - id: foo
-        uses: actions/drorvt/composite-match-ref-patterns@main
+        uses: drorvt/composite-match-ref-patterns@main
         
   Docker-builds:
     needs: [Match-ref-patterns]
