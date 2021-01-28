@@ -1,39 +1,48 @@
-
-# Determine whether image should be pushed based on git ref
-name: Match ref patterns
-id: matching
-run: |
-  if [[ $GITHUB_REF =~ refs/heads/release/*[0-9].*[0-9].*[0-9] ]]; then
-    pattern=$DOCKER_BRANCH_RELEASE_PATTERN 
-    ref=${GITHUB_REF#refs/heads/}
-    echo "::set-output name=registry::$REGISTRY_URL:$RELEASE_PORT/release"
-  elif [[ $GITHUB_REF =~ refs/heads/develop ]]; then
-    pattern=$DOCKER_BRANCH_DEVELOP_PATTERN 
-    ref=${GITHUB_REF#refs/heads/}
-    echo "::set-output name=registry::$REGISTRY_URL:$RELEASE_PORT/develop"
-  elif [[ $GITHUB_REF =~ refs/heads/feature/ ]]; then
-    pattern=$DOCKER_BRANCH_FEATURE_PATTERN
-    ref=${GITHUB_REF#refs/heads/}
-    echo "::set-output name=registry::$REGISTRY_URL:$DEVELOP_PORT/feature"
-  elif [[ $GITHUB_REF =~ refs/heads/ ]]; then
-    echo "::set-output name=pattern-matched::false"
-    echo "::set-output name=lifecycle::compile jib:dockerBuild"
-    ref=${GITHUB_REF#refs/heads/}
-    echo "::set-output name=ref::${ref//\//-}"
-    echo "::set-output name=registry::$REGISTRY_URL:$DEVELOP_PORT"
-    exit 0
-  else
-    pattern=$DOCKER_TAG_PATTERNS
-    ref=${GITHUB_REF#refs/tags/}
-    echo "::set-output name=registry::$REGISTRY_URL:$RELEASE_PORT/delivery"
-  fi
-  echo "::set-output name=ref::${ref//\//-}"
-  IFS=':' read -ra arr <<< $pattern
-  for pattern in ${arr[@]}; do
-    if [[ $ref =~ $pattern ]]; then
-      echo "::set-output name=pattern-matched::true" && exit 0 
-    fi
-  done
-  echo "::set-output name=pattern-matched::false"
-  exit 0 
-
+name: 'Hello World'
+description: 'Greet someone'
+inputs:
+  who-to-greet:  # id of input
+    description: 'Who to greet'
+    required: true
+    default: 'World'
+outputs:
+  random-number: 
+    description: "Random number"
+    value: ${{ steps.random-number-generator.outputs.random-id }}
+runs:
+  using: "composite"
+  steps: 
+    - run: echo Hello.
+        if [[ $GITHUB_REF =~ refs/heads/release/*[0-9].*[0-9].*[0-9] ]]; then
+          pattern=$DOCKER_BRANCH_RELEASE_PATTERN 
+          ref=${GITHUB_REF#refs/heads/}
+          echo "::set-output name=registry::$REGISTRY_URL:$RELEASE_PORT/release"
+        elif [[ $GITHUB_REF =~ refs/heads/develop ]]; then
+          pattern=$DOCKER_BRANCH_DEVELOP_PATTERN 
+          ref=${GITHUB_REF#refs/heads/}
+          echo "::set-output name=registry::$REGISTRY_URL:$RELEASE_PORT/develop"
+        elif [[ $GITHUB_REF =~ refs/heads/feature/ ]]; then
+          pattern=$DOCKER_BRANCH_FEATURE_PATTERN
+          ref=${GITHUB_REF#refs/heads/}
+          echo "::set-output name=registry::$REGISTRY_URL:$DEVELOP_PORT/feature"
+        elif [[ $GITHUB_REF =~ refs/heads/ ]]; then
+          echo "::set-output name=pattern-matched::false"
+          echo "::set-output name=lifecycle::compile jib:dockerBuild"
+          ref=${GITHUB_REF#refs/heads/}
+          echo "::set-output name=ref::${ref//\//-}"
+          echo "::set-output name=registry::$REGISTRY_URL:$DEVELOP_PORT"
+          exit 0
+        else
+          pattern=$DOCKER_TAG_PATTERNS
+          ref=${GITHUB_REF#refs/tags/}
+          echo "::set-output name=registry::$REGISTRY_URL:$RELEASE_PORT/delivery"
+        fi
+        echo "::set-output name=ref::${ref//\//-}"
+        IFS=':' read -ra arr <<< $pattern
+        for pattern in ${arr[@]}; do
+          if [[ $ref =~ $pattern ]]; then
+            echo "::set-output name=pattern-matched::true" && exit 0 
+          fi
+        done
+        echo "::set-output name=pattern-matched::false"
+        exit 0
