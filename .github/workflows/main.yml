@@ -15,30 +15,6 @@ env:
   TRIVY_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
 jobs:
-  Linting:    
-    runs-on: ubuntu-latest
-    name: pipeline
-    steps:
-      - name: check-out
-        uses: actions/checkout@v2
-        id: checkout
-
-      # Run pylint
-      - name: pylnt-action
-        uses: fylein/python-pylint-github-action@v1
-        with:
-          args: "pip3 install -r requirements.txt && pylint Texel/ --msg-template='{line:4d},{column:3d}: {msg} ({symbol}) [{category}]' --output-format=colorized --exit-zero | tee summary.txt"
-
-      # Determine number of errors
-      - name: Count linting errros
-        id: error-cnt
-        run: echo "::set-output name=linting_errors::$(cat summary.txt | grep -c '31merror')"
-
-      # Stop workflow if there is a non zero amount of errors as a result of pylint
-      - name: Exit if pylint had errors
-        if: ${{ steps.error-cnt.outputs.linting_errors != 0}}
-        run: echo "::error ::Linting discovered that there are ${{ steps.error-cnt.outputs.linting_errors }} errors in the project!" && exit ${{ steps.error-cnt.outputs.linting_errors }}
-
   Match-ref-patterns:
     runs-on: ubuntu-latest
     outputs:
@@ -51,7 +27,7 @@ jobs:
         uses: actions/composite-match-ref-patterns@v1
 
   Docker-builds:
-    needs: [Linting, Match-ref-patterns]
+    needs: [Match-ref-patterns]
     runs-on: ubuntu-latest
     steps:
       # Checkout repo
