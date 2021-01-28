@@ -1,6 +1,6 @@
 
 # Determine whether image should be pushed based on git ref
-- name: Match ref patterns
+name: Match ref patterns
 id: matching
 run: |
   if [[ $GITHUB_REF =~ refs/heads/release/*[0-9].*[0-9].*[0-9] ]]; then
