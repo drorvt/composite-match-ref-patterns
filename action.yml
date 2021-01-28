@@ -38,4 +38,3 @@ runs:
       done
       echo "::set-output name=pattern-matched::false"
       exit 0
-      shell: bash
