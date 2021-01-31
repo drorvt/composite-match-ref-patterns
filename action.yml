@@ -10,7 +10,7 @@ runs:
     - run: |
         - id: generator
         if [[ $GITHUB_REF =~ refs/heads/release/*[0-9].*[0-9].*[0-9] ]]; then
-          pattern=release/*[0-9].*[0-9].*[0-9]
+          pattern=$DOCKER_BRANCH_RELEASE_PATTERN 
           ref=${GITHUB_REF#refs/heads/}
           echo $ref
           echo "::set-output name=registry::$REGISTRY_URL:$RELEASE_PORT/release"
