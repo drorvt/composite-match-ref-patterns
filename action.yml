@@ -6,11 +6,10 @@ runs:
   steps: 
     - run: |
         if [[ $GITHUB_REF =~ refs/heads/release/*[0-9].*[0-9].*[0-9] ]]; then
-          pattern=$DOCKER_BRANCH_RELEASE_PATTERN 
+          pattern=release/*[0-9].*[0-9].*[0-9]
           ref=${GITHUB_REF#refs/heads/}
           echo $ref
           echo "::set-output name=registry::$REGISTRY_URL:$RELEASE_PORT/release"
-          echo "The string is: $registry"
         elif [[ $GITHUB_REF =~ refs/heads/develop ]]; then
           pattern=$DOCKER_BRANCH_DEVELOP_PATTERN 
           ref=${GITHUB_REF#refs/heads/}
@@ -41,6 +40,7 @@ runs:
         echo "::set-output name=pattern-matched::false"
         exit 0
       shell: bash
+
       env:
         DOCKER_BRANCH_RELEASE_PATTERN: 'release/*[0-9].*[0-9].*[0-9]' 
         DOCKER_BRANCH_DEVELOP_PATTERN: 'develop' 
