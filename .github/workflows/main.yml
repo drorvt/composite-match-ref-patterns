@@ -15,8 +15,6 @@ env:
   TRIVY_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
 jobs:
- debug: true
-   
    Match-ref-patterns:
     runs-on: ubuntu-latest
     outputs:
