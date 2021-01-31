@@ -1,10 +1,14 @@
 name: "My composite action"
 description: "Execute some run setps to do something"
-
+outputs:
+  random-number: 
+    description: " test"
+    value: ${{ steps.generator.outputs.registry }}
 runs:
   using: "composite"
   steps: 
     - run: |
+        - id: generator
         if [[ $GITHUB_REF =~ refs/heads/release/*[0-9].*[0-9].*[0-9] ]]; then
           pattern=release/*[0-9].*[0-9].*[0-9]
           ref=${GITHUB_REF#refs/heads/}
@@ -51,3 +55,4 @@ runs:
         DEVELOP_PORT: "5002"
         TRIVY_USERNAME: ${{ secrets.DOCKER_USER }}
         TRIVY_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
