@@ -1,10 +1,10 @@
 name: "My composite action"
 description: "Execute some run setps to do something"
+
 runs:
   using: "composite"
   steps: 
     - run: |
-      
         if [[ $GITHUB_REF =~ refs/heads/release/*[0-9].*[0-9].*[0-9] ]]; then
           pattern=$DOCKER_BRANCH_RELEASE_PATTERN 
           ref=${GITHUB_REF#refs/heads/}
@@ -40,3 +40,13 @@ runs:
         echo "::set-output name=pattern-matched::false"
         exit 0
       shell: bash
+      env:
+        DOCKER_BRANCH_RELEASE_PATTERN: 'release/*[0-9].*[0-9].*[0-9]' 
+        DOCKER_BRANCH_DEVELOP_PATTERN: 'develop' 
+        DOCKER_BRANCH_FEATURE_PATTERN: 'feature/.*' 
+        DOCKER_TAG_PATTERNS: '.*'
+        REGISTRY_URL: nexus.texel.live
+        RELEASE_PORT: "5000"  
+        DEVELOP_PORT: "5002"
+        TRIVY_USERNAME: ${{ secrets.DOCKER_USER }}
+        TRIVY_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
