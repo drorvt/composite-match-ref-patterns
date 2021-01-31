@@ -2,18 +2,18 @@ name: "My composite action"
 description: "Execute some run setps to do something"
 outputs:
   random-number: 
-    description: " test"
+    description: "Random number"
     value: ${{ steps.generator.outputs.registry }}
 runs:
   using: "composite"
   steps: 
     - id: generator
-    - run: |
+      run: |
         if [[ $GITHUB_REF =~ refs/heads/release/*[0-9].*[0-9].*[0-9] ]]; then
           pattern=$DOCKER_BRANCH_RELEASE_PATTERN 
           ref=${GITHUB_REF#refs/heads/}
           echo $ref
-          echo "::set-output name=registry::$REGISTRY_URL:$RELEASE_PORT/release"
+          echo "::set-output name=registry::$REGISTRY_URL:$RELEASE_PORT/release"          
         elif [[ $GITHUB_REF =~ refs/heads/develop ]]; then
           pattern=$DOCKER_BRANCH_DEVELOP_PATTERN 
           ref=${GITHUB_REF#refs/heads/}
