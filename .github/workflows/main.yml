@@ -13,5 +13,5 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - id: matching
-        uses: drorvt/composite-match-ref-patterns@main
+        uses: drorvt/composite-match-ref-patterns
 
