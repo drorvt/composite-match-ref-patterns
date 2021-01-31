@@ -3,6 +3,10 @@ name: Build packager Docker image
 on: 
   push:
 
+env:
+  TRIVY_USERNAME: ${{ secrets.DOCKER_USER }}
+  TRIVY_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
 jobs:
   Match-ref-patterns:
     runs-on: ubuntu-latest
