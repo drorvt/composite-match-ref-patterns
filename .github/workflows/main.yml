@@ -21,7 +21,9 @@ jobs:
       pattern-matched: ${{ steps.matching.outputs.pattern-matched }}
       registry: ${{ steps.matching.outputs.registry }}
       ref: ${{ steps.matching.outputs.ref }}
+      debug: true
     steps:
       - uses: actions/checkout@v2
       - id: foo
         uses: drorvt/composite-match-ref-patterns@main
+        
