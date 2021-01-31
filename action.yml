@@ -53,4 +53,6 @@ runs:
         REGISTRY_URL: nexus.texel.live
         RELEASE_PORT: "5000"  
         DEVELOP_PORT: "5002"
+        TRIVY_USERNAME: ${{ secrets.DOCKER_USER }}
+        TRIVY_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
