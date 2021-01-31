@@ -1,7 +1,7 @@
 name: "My composite action"
 description: "Execute some run setps to do something"
 outputs:
-  random-number: 
+  random-registry: 
     description: "Registry path"
     value: ${{ steps.generator.outputs.registry }}
 runs:
