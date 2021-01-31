@@ -8,7 +8,7 @@ runs:
   using: "composite"
   steps: 
     - run: |
-        - id: generator
+    - id: generator
         if [[ $GITHUB_REF =~ refs/heads/release/*[0-9].*[0-9].*[0-9] ]]; then
           pattern=$DOCKER_BRANCH_RELEASE_PATTERN 
           ref=${GITHUB_REF#refs/heads/}
