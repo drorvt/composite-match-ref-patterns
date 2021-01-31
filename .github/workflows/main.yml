@@ -16,4 +16,5 @@ jobs:
         uses: drorvt/composite-match-ref-patterns@main
       - name: display string
         run: |
-          echo "The string is: ${{ steps.matching.outputs.content }}"
+          echo "The string is: ${{ registry}}"
+          
